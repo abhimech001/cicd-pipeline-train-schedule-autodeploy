@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "bhavukm" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "bhavukm/train-schedule"
+        DOCKER_IMAGE_NAME = "abhimech001/train-schedule"
     }
     stages {
         stage('Build') {
@@ -12,11 +12,10 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
-        stage('Build Docker Image') 
-        {
-        //     // when {
-        //     //     branch 'master'
-        //     }
+        stage('Build Docker Image') {
+            when {
+                branch 'master'
+            }
             steps {
                 script {
                     app = docker.build(DOCKER_IMAGE_NAME)
