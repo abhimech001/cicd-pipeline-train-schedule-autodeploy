@@ -12,32 +12,41 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
-        stage('Build Docker Image') {
-            when {
-                branch 'master'
-            }
+        stage (Build and Push Docker Image') {
             steps {
-                script {
-                    app = docker.build(DOCKER_IMAGE_NAME)
-                    app.inside {
-                        sh 'echo Hello, World!'
-                    }
-                }
+                sh 'docker build -t abhimech001/train-schedule:$BUILD_NUMBER .'            
+            withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'Docker_pwd', usernameVariable: 'Docker_ID')]) {
+                sh "echo '${Docker_pwd}' | docker login -u ${Docker_ID} --password-stdin"
+            }
+                sh 'docker push abhimech001/train-schedule:$BUILD_NUMBER'
             }
         }
-        stage('Push Docker Image') {
-            when {
-                branch 'master'
-            }
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-                    }
-                }
-            }
-        }
+        // stage('Build Docker Image') {
+        //     when {
+        //         branch 'master'
+        //     }
+        //     steps {
+        //         script {
+        //             app = docker.build(DOCKER_IMAGE_NAME)
+        //             app.inside {
+        //                 sh 'echo Hello, World!'
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Push Docker Image') {
+        //     when {
+        //         branch 'master'
+        //     }
+        //     steps {
+        //         script {
+        //             docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+        //                 app.push("${env.BUILD_NUMBER}")
+        //                 app.push("latest")
+        //             }
+        //         }
+        //     }
+        // }
         stage('CanaryDeploy') {
             when {
                 branch 'master'
