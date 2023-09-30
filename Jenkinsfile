@@ -13,7 +13,7 @@ pipeline {
             }
         }
         stage('Build Docker Image') 
-        // {
+        {
         //     // when {
         //     //     branch 'master'
         //     }
