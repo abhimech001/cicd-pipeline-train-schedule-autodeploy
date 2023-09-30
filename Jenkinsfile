@@ -12,7 +12,7 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
-        stage (Build and Push Docker Image') {
+        stage ('Build and Push Docker Image') {
             steps {
                 sh 'docker build -t abhimech001/train-schedule:$BUILD_NUMBER .'            
             withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'Docker_pwd', usernameVariable: 'Docker_ID')]) {
