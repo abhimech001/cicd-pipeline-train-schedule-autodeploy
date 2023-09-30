@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        //Docker repo
         DOCKER_IMAGE_NAME = "abhimech001/train-schedule"
     }
     stages {
