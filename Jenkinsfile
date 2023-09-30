@@ -12,10 +12,11 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
-        stage('Build Docker Image') {
-            when {
-                branch 'master'
-            }
+        stage('Build Docker Image') 
+        // {
+        //     // when {
+        //     //     branch 'master'
+        //     }
             steps {
                 script {
                     app = docker.build(DOCKER_IMAGE_NAME)
